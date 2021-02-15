@@ -2,33 +2,25 @@ html{
     color:black;
 }
 
-#head{
-    display: flex;
-    justify-content: center;
-}
-
-
 .cell{
-    width: 190px;
-    height: 190px;
-    background-color: aqua;
-    border-style: solid;
-    border-radius: 1px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
     text-align: center;
-    vertical-align: middle;
-    line-height: 190px;
+    height: 125px;
+    width: 125px;
+    line-height: 125px;
 }
 
-#board{
-    width: 600px;
-    height: 600px;
-    flex-wrap: wrap;
-}
-
-#container, #board{
-    display: flex;
+#board {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+    background-color: #2196F3;
+    padding: 10px;  
 }
 
 #container{
+    display: flex;
     justify-content: center;
 }

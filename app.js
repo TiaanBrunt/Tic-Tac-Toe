@@ -1,26 +1,42 @@
 const boardDiv = document.querySelector("#board");
 const resetButton = document.querySelector("#reset");
-resetButton.addEventListener('click', reset);
-let playerOne = true;
-let playerTwo = false; 
-let playerOneScore = 0;
-let playerTwoScore = 0;
-let board = []; 
-let turnCount = 0;
+const restartButton = document.querySelector("#restart");
+
 
 const gameBoard = (() => {
+    let playerOne = true;
+    let playerOneScore = 0;
+    let playerTwoScore = 0;
+    let board = []; 
+    let turnCount = 0;
+
     for(let i = 0; i < 9; i++){
         let boardCell = document.createElement("div");
         boardCell.classList.add("cell");
         boardCell.addEventListener('click', () => {
-            turn(boardCell) }); //need to call function here
+            turn(boardCell) }); 
         boardDiv.append(boardCell);
         board.push(boardCell);
+    }
+
+
+
+    const restartGame = () => {
+        playerOneScore = 0;
+        playerTwoScore = 0;
+        updateScore();
+        reset();
+    }
+
+    const updateScore = () => {
+        document.getElementById("playerOneScore").innerHTML = "<strong>Player X Score:</strong> " + playerOneScore;
+        document.getElementById("playerTwoScore").innerHTML = "<strong>Player O Score:</strong> " + playerTwoScore;
     }
 
     const reset = () => {
         board = [];
         turnCount = 0;
+        playerOne = true;
         let boardCells = document.getElementsByClassName('cell');
         for(let i = 0; i < boardCells.length; i++){
             boardCells[i].innerHTML = "";
@@ -35,20 +51,17 @@ const gameBoard = (() => {
         else if(playerOne){
                 cell.innerHTML = "X";
                 playerOne = false;
-                playerTwo = true;
                 turnCount++;
                 checkGame();
             }
-    
         else{
             cell.innerHTML = "O";
-            playerTwo = false;
             playerOne = true;
             turnCount++;
             checkGame();
         }    
     }
-
+    //Checks win conditions
     const checkGame = () => {
         if(turnCount < 3){
             return;
@@ -83,14 +96,24 @@ const gameBoard = (() => {
         else if(board[0].innerHTML == "O" && board[4].innerHTML == "O" && board[8].innerHTML == "O"){
             winner("p2");
         }
-
         else if(board[2].innerHTML == "X" && board[4].innerHTML == "X" && board[6].innerHTML == "X"){
             winner("p1");
         }
         else if(board[2].innerHTML == "O" && board[4].innerHTML == "O" && board[6].innerHTML == "O"){
             winner("p2");
         }
-        
+        else if(board[2].innerHTML == "X" && board[5].innerHTML == "X" && board[8].innerHTML == "X"){
+            winner("p1");
+        }
+        else if(board[2].innerHTML == "O" && board[5].innerHTML == "O" && board[8].innerHTML == "O"){
+            winner("p2");
+        }
+        else if(board[1].innerHTML == "X" && board[4].innerHTML == "X" && board[7].innerHTML == "X"){
+            winner("p1");
+        }
+        else if(board[1].innerHTML == "O" && board[4].innerHTML == "O" && board[7].innerHTML == "O"){
+            winner("p2");
+        }
         else if(turnCount == 9){
             alert("Draw, time to reset");
             reset();
@@ -101,20 +124,18 @@ const gameBoard = (() => {
         if(player == "p1"){
             alert("Player One won!");
             playerOneScore++;
-            document.getElementById("playerOneScore").innerHTML = "Player One Score" + playerOneScore;
+            updateScore();
             reset();
         }
         else{
             alert("Player Two won!");
             playerTwoScore++;
-            document.getElementById("playerTwoScore").innerHTML = "Player Two Score" + playerOneScore;
+            updateScore();
             reset();
         }
     }
-
-    
-    return {board, reset, winner, checkGame, turn};
+    return {board, reset, winner, checkGame, turn, restartGame};
 })();
 
-
-
+resetButton.addEventListener('click', gameBoard.reset);
+restartButton.addEventListener('click', gameBoard.restartGame);
